@@ -345,6 +345,7 @@ function uiColors(style) {
 
 // Token rules are taken from VS Code's Dark Modern and Light Modern themes.
 // Each of their colors is replaced with the Qwark color that plays the same role.
+// Their control flow color maps to the bold Qwark keyword, their keyword color to the Qwark preprocessor color.
 const baseThemeDir = resolve(root, "scripts/vscode-themes");
 const baseThemes = {
   dark: "dark_plus.json",
@@ -356,7 +357,7 @@ const roles = {
     "#d4d4d4": "text",
     "#000080": "title",
     "#6a9955": "comment",
-    "#569cd6": "keyword",
+    "#569cd6": "preproc",
     "#c586c0": "keyword",
     "#b5cea8": "number",
     "#646695": "string.regex",
@@ -376,7 +377,7 @@ const roles = {
     "#000000": "text",
     "#000080": "title",
     "#008000": "comment",
-    "#0000ff": "keyword",
+    "#0000ff": "preproc",
     "#af00db": "keyword",
     "#800080": "keyword",
     "#098658": "number",
@@ -406,28 +407,41 @@ async function loadBaseTheme(fileName) {
   };
 }
 
-function recolor(theme, color) {
-  const key = color.toLowerCase().replace(/^(#[0-9a-f]{6})ff$/, "$1");
-  const role = roles[theme.appearance][key];
-  if (!role) throw new Error(`${theme.name}: no Qwark role for ${color}.`);
+const boldRoles = new Set(["keyword"]);
 
+function role(theme, color) {
+  const key = color.toLowerCase().replace(/^(#[0-9a-f]{6})ff$/, "$1");
+  const name = roles[theme.appearance][key];
+  if (!name) throw new Error(`${theme.name}: no Qwark role for ${color}.`);
+  return name;
+}
+
+function recolor(theme, name) {
   const style = theme.style;
-  if (role === "text") return style.text;
-  if (role === "error") return style.error;
-  return style.syntax[role].color;
+  if (name === "text") return style.text;
+  if (name === "error") return style.error;
+  return style.syntax[name].color;
+}
+
+function recolorSettings(theme, settings) {
+  if (!settings.foreground) return settings;
+
+  const name = role(theme, settings.foreground);
+  return {
+    ...settings,
+    foreground: recolor(theme, name),
+    ...(boldRoles.has(name) && !settings.fontStyle ? { fontStyle: "bold" } : {})
+  };
 }
 
 async function tokenRules(theme) {
   const base = await loadBaseTheme(baseThemes[theme.appearance]);
-  const tokenColors = base.tokenColors.map((rule) => ({
-    ...rule,
-    settings: {
-      ...rule.settings,
-      ...(rule.settings.foreground ? { foreground: recolor(theme, rule.settings.foreground) } : {})
-    }
-  }));
+  const tokenColors = base.tokenColors.map((rule) => ({ ...rule, settings: recolorSettings(theme, rule.settings) }));
   const semanticTokenColors = Object.fromEntries(
-    Object.entries(base.semanticTokenColors).map(([token, color]) => [token, recolor(theme, color)])
+    Object.entries(base.semanticTokenColors).map(([token, color]) => {
+      const name = role(theme, color);
+      return [token, boldRoles.has(name) ? { foreground: recolor(theme, name), bold: true } : recolor(theme, name)];
+    })
   );
 
   return { tokenColors, semanticTokenColors };

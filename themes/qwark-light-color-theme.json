@@ -352,7 +352,7 @@
     {
       "scope": "constant.language",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -492,7 +492,7 @@
         "entity.name.function.preprocessor"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -516,13 +516,13 @@
     {
       "scope": "storage",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
       "scope": "storage.type",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -531,7 +531,7 @@
         "keyword.operator.noexcept"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -562,7 +562,7 @@
         "string.quoted.double.handlebars"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -579,7 +579,7 @@
         "punctuation.section.embedded"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -627,13 +627,13 @@
     {
       "scope": "keyword",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
       "scope": "keyword.control",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -656,7 +656,7 @@
         "keyword.operator.wordlike"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -701,7 +701,7 @@
       "name": "this.self",
       "scope": "variable.language",
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -784,7 +784,8 @@
         "entity.name.operator"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#236b31",
+        "fontStyle": "bold"
       }
     },
     {
@@ -881,7 +882,7 @@
         "constant.other.option"
       ],
       "settings": {
-        "foreground": "#236b31"
+        "foreground": "#24675b"
       }
     },
     {
@@ -898,7 +899,10 @@
     }
   ],
   "semanticTokenColors": {
-    "newOperator": "#236b31",
+    "newOperator": {
+      "foreground": "#236b31",
+      "bold": true
+    },
     "stringLiteral": "#6f6200",
     "customLiteral": "#3f712b",
     "numberLiteral": "#825d00"
