@@ -408,7 +408,8 @@
         "keyword.control",
         "keyword.operator.new",
         "keyword.operator.expression",
-        "keyword.operator.logical.python"
+        "keyword.operator.logical.python",
+        "punctuation.definition.directive"
       ],
       "settings": {
         "foreground": "#236b31",
@@ -433,7 +434,6 @@
       "name": "Preprocessor",
       "scope": [
         "meta.preprocessor",
-        "keyword.control.directive",
         "entity.name.function.preprocessor"
       ],
       "settings": {
