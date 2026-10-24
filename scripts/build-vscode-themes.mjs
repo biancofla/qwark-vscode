@@ -407,7 +407,7 @@ function semanticTokens(style) {
     event: syntax.function.color,
     function: syntax.function.color,
     method: syntax.function.color,
-    macro: syntax.function.color,
+    macro: syntax.preproc.color,
     label: syntax.label.color,
     comment: syntax.comment.color,
     string: syntax.string.color,
