@@ -343,118 +343,94 @@ function uiColors(style) {
   };
 }
 
-// Token rules are taken from VS Code's Dark Modern and Light Modern themes.
-// Each of their colors is replaced with the Qwark color that plays the same role.
-// Their control flow color maps to the bold Qwark keyword, their keyword color to the Qwark preprocessor color.
-const baseThemeDir = resolve(root, "scripts/vscode-themes");
-const baseThemes = {
-  dark: "dark_plus.json",
-  light: "light_plus.json"
-};
+function textMateRules(style) {
+  const syntax = style.syntax;
+  const settings = (key, extra = {}) => ({
+    foreground: syntax[key].color,
+    ...(syntax[key].font_style ? { fontStyle: syntax[key].font_style } : {}),
+    ...(syntax[key].font_weight >= 600 ? { fontStyle: "bold" } : {}),
+    ...extra
+  });
 
-const roles = {
-  dark: {
-    "#d4d4d4": "text",
-    "#000080": "title",
-    "#6a9955": "comment",
-    "#569cd6": "preproc",
-    "#c586c0": "keyword",
-    "#b5cea8": "number",
-    "#646695": "string.regex",
-    "#d16969": "string.regex",
-    "#d7ba7d": "string.escape",
-    "#9cdcfe": "variable",
-    "#f44747": "error",
-    "#6796e6": "punctuation",
-    "#808080": "punctuation",
-    "#ce9178": "string",
-    "#dcdcaa": "function",
-    "#4ec9b0": "type",
-    "#4fc1ff": "constant",
-    "#c8c8c8": "label"
-  },
-  light: {
-    "#000000": "text",
-    "#000080": "title",
-    "#008000": "comment",
-    "#0000ff": "preproc",
-    "#af00db": "keyword",
-    "#800080": "keyword",
-    "#098658": "number",
-    "#811f3f": "string.regex",
-    "#d16969": "string.regex",
-    "#ee0000": "string.escape",
-    "#800000": "tag",
-    "#e50000": "attribute",
-    "#0451a5": "property",
-    "#001080": "variable",
-    "#cd3131": "error",
-    "#a31515": "string",
-    "#795e26": "function",
-    "#267f99": "type",
-    "#0070c1": "constant"
-  }
-};
+  return [
+    { name: "Comments", scope: ["comment", "punctuation.definition.comment"], settings: settings("comment") },
+    { name: "Documentation comments", scope: ["comment.block.documentation", "comment.line.documentation"], settings: settings("comment.doc") },
+    { name: "Strings", scope: ["string", "string.quoted", "string.template", "punctuation.definition.string", "storage.type.string.python"], settings: settings("string") },
+    { name: "Regular expressions", scope: ["string.regexp", "constant.other.character-class.regexp"], settings: settings("string.regex") },
+    { name: "Escape characters", scope: ["constant.character.escape", "constant.other.placeholder", "punctuation.definition.template-expression"], settings: settings("string.escape") },
+    { name: "Numbers", scope: ["constant.numeric", "number"], settings: settings("number") },
+    { name: "Booleans", scope: ["constant.language.boolean", "constant.language.json"], settings: settings("boolean") },
+    { name: "Constants", scope: ["constant", "variable.other.constant", "variable.other.enummember"], settings: settings("constant") },
+    { name: "Keywords", scope: ["keyword", "storage.type", "storage.modifier", "keyword.control", "keyword.operator.new", "keyword.operator.expression", "keyword.operator.logical.python"], settings: settings("keyword") },
+    { name: "Operators", scope: ["keyword.operator", "keyword.operator.assignment", "keyword.operator.arithmetic", "keyword.operator.logical", "keyword.operator.comparison", "punctuation.separator.annotation.result.python"], settings: settings("operator") },
+    { name: "Preprocessor", scope: ["meta.preprocessor", "keyword.control.directive", "entity.name.function.preprocessor"], settings: settings("preproc") },
+    { name: "Types", scope: ["entity.name.type", "entity.name.type.class", "entity.name.type.interface", "entity.name.type.struct", "entity.name.type.enum", "support.type", "support.class", "storage.type.cs", "storage.type.java", "storage.type.primitive", "storage.type.built-in"], settings: settings("type") },
+    { name: "Constructors", scope: ["entity.name.function.constructor", "meta.function-call.constructor", "support.function.construct"], settings: settings("constructor") },
+    { name: "Functions", scope: ["entity.name.function", "support.function", "meta.function-call", "variable.function"], settings: settings("function") },
+    { name: "Properties", scope: ["variable.other.property", "variable.other.object.property", "meta.object-literal.key", "support.variable.property"], settings: settings("property") },
+    { name: "Variables", scope: ["variable", "variable.other", "variable.parameter", "entity.name.variable"], settings: settings("variable") },
+    { name: "Special variables", scope: ["variable.language", "variable.language.this", "variable.language.super", "variable.other.readwrite.instance", "variable.other.readwrite.class"], settings: settings("variable.special") },
+    { name: "Tags", scope: ["entity.name.tag", "meta.tag.sgml", "punctuation.definition.tag"], settings: settings("tag") },
+    { name: "Attributes", scope: ["entity.other.attribute-name", "support.type.property-name.css", "meta.attribute"], settings: settings("attribute") },
+    { name: "Labels", scope: ["entity.name.label", "entity.name.section", "support.constant.property-value.css"], settings: settings("label") },
+    { name: "Variants", scope: ["entity.name.type.variant", "entity.name.type.enum.variant", "constant.other.enum"], settings: settings("variant") },
+    { name: "Brackets", scope: ["punctuation.section", "punctuation.definition.parameters", "punctuation.definition.arguments", "punctuation.definition.block"], settings: settings("punctuation.bracket") },
+    { name: "Delimiters", scope: ["punctuation.separator", "punctuation.terminator"], settings: settings("punctuation.delimiter") },
+    { name: "Punctuation", scope: ["punctuation", "meta.brace", "constant.character.format.placeholder.other.python"], settings: settings("punctuation") },
+    { name: "Markdown headings", scope: ["markup.heading", "entity.name.section.markdown", "punctuation.definition.heading"], settings: settings("title") },
+    { name: "Bold text", scope: ["markup.bold", "markup.bold string"], settings: settings("emphasis.strong") },
+    { name: "Italic text", scope: ["markup.italic", "markup.italic string"], settings: settings("emphasis") },
+    { name: "Links", scope: ["markup.underline.link", "string.other.link", "meta.link.inline.markdown"], settings: settings("link_text") },
+    { name: "Link destinations", scope: ["markup.underline.link.image", "meta.link.destination", "string.other.link.description"], settings: settings("link_uri") },
+    { name: "Literal text", scope: ["markup.inline.raw", "markup.raw", "markup.quote", "markup.inserted"], settings: settings("text.literal") },
+    { name: "Embedded source", scope: ["meta.embedded", "source.embedded", "storage.type.format.python"], settings: settings("embedded") },
+    { name: "Invalid", scope: ["invalid", "invalid.illegal", "invalid.deprecated"], settings: { foreground: style.error } }
+  ];
+}
 
-async function loadBaseTheme(fileName) {
-  const theme = JSON.parse(await readFile(resolve(baseThemeDir, fileName), "utf8"));
-  if (!theme.include) return theme;
-
-  const parent = await loadBaseTheme(theme.include);
+function semanticTokens(style) {
+  const syntax = style.syntax;
   return {
-    tokenColors: [...parent.tokenColors, ...theme.tokenColors],
-    semanticTokenColors: { ...parent.semanticTokenColors, ...theme.semanticTokenColors }
+    namespace: syntax.variable.color,
+    type: { foreground: syntax.type.color, bold: true },
+    class: { foreground: syntax.type.color, bold: true },
+    enum: { foreground: syntax.enum.color, bold: true },
+    interface: { foreground: syntax.type.color, bold: true },
+    struct: { foreground: syntax.type.color, bold: true },
+    typeParameter: { foreground: syntax.type.color, bold: true },
+    parameter: syntax.variable.color,
+    selfParameter: syntax["variable.special"].color,
+    clsParameter: syntax["variable.special"].color,
+    variable: syntax.variable.color,
+    property: syntax.property.color,
+    enumMember: syntax.constant.color,
+    event: syntax.function.color,
+    function: syntax.function.color,
+    method: syntax.function.color,
+    macro: syntax.preproc.color,
+    label: syntax.label.color,
+    comment: syntax.comment.color,
+    string: syntax.string.color,
+    number: syntax.number.color,
+    regexp: syntax["string.regex"].color,
+    operator: syntax.operator.color,
+    keyword: { foreground: syntax.keyword.color, bold: true },
+    decorator: syntax.function.color,
+    "variable.readonly": syntax.constant.color,
+    "property.readonly": syntax.constant.color,
+    "*.deprecated": { strikethrough: true }
   };
 }
 
-const boldRoles = new Set(["keyword"]);
-
-function role(theme, color) {
-  const key = color.toLowerCase().replace(/^(#[0-9a-f]{6})ff$/, "$1");
-  const name = roles[theme.appearance][key];
-  if (!name) throw new Error(`${theme.name}: no Qwark role for ${color}.`);
-  return name;
-}
-
-function recolor(theme, name) {
-  const style = theme.style;
-  if (name === "text") return style.text;
-  if (name === "error") return style.error;
-  return style.syntax[name].color;
-}
-
-function recolorSettings(theme, settings) {
-  if (!settings.foreground) return settings;
-
-  const name = role(theme, settings.foreground);
-  return {
-    ...settings,
-    foreground: recolor(theme, name),
-    ...(boldRoles.has(name) && !settings.fontStyle ? { fontStyle: "bold" } : {})
-  };
-}
-
-async function tokenRules(theme) {
-  const base = await loadBaseTheme(baseThemes[theme.appearance]);
-  const tokenColors = base.tokenColors.map((rule) => ({ ...rule, settings: recolorSettings(theme, rule.settings) }));
-  const semanticTokenColors = Object.fromEntries(
-    Object.entries(base.semanticTokenColors).map(([token, color]) => {
-      const name = role(theme, color);
-      return [token, boldRoles.has(name) ? { foreground: recolor(theme, name), bold: true } : recolor(theme, name)];
-    })
-  );
-
-  return { tokenColors, semanticTokenColors };
-}
-
-async function buildTheme(theme) {
+function buildTheme(theme) {
   return {
     $schema: "vscode://schemas/color-theme",
     name: theme.name,
     type: theme.appearance,
     semanticHighlighting: true,
     colors: uiColors(theme.style),
-    ...(await tokenRules(theme))
+    tokenColors: textMateRules(theme.style),
+    semanticTokenColors: semanticTokens(theme.style)
   };
 }
 
@@ -470,7 +446,7 @@ for (const theme of source.themes) {
   if (!relativePath) continue;
 
   const outputPath = resolve(root, relativePath);
-  const content = `${JSON.stringify(await buildTheme(theme), null, 2)}\n`;
+  const content = `${JSON.stringify(buildTheme(theme), null, 2)}\n`;
 
   if (checkOnly) {
     const current = await readFile(outputPath, "utf8").catch(() => "");
