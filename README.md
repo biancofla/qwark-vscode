@@ -2,7 +2,7 @@
 
 Qwark is a muted green theme family for Visual Studio Code, designed to stay
 comfortable during long reading and coding sessions. This is the Visual Studio
-Code port of the original [Qwark theme for Zed](https://github.com/biancofla/qwark).
+Code port of the original [Qwark theme for Zed](https://github.com/biancofla/qwark-zed).
 
 ## Why Qwark?
 
