@@ -1,0 +1,56 @@
+{
+  "name": "qwark-theme",
+  "displayName": "Qwark",
+  "description": "A muted green theme family designed for comfortable long reading sessions.",
+  "version": "0.2.0",
+  "publisher": "biancofla",
+  "license": "MIT",
+  "author": {
+    "name": "Flavio Biancospino",
+    "email": "flavio.biancospino@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biancofla/qwark-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/biancofla/qwark-vscode/issues"
+  },
+  "homepage": "https://github.com/biancofla/qwark-vscode#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "color-theme",
+    "dark-theme",
+    "light-theme",
+    "green",
+    "muted"
+  ],
+  "galleryBanner": {
+    "color": "#18221b",
+    "theme": "dark"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "label": "Qwark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/qwark-color-theme.json"
+      },
+      {
+        "label": "Qwark Light",
+        "uiTheme": "vs",
+        "path": "./themes/qwark-light-color-theme.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build-vscode-themes.mjs",
+    "check": "node scripts/build-vscode-themes.mjs --check"
+  }
+}

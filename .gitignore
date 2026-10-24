@@ -1,0 +1,5 @@
+# macOS metadata.
+.DS_Store
+
+# Visual Studio Code extension packages.
+*.vsix
